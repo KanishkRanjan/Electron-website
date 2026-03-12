@@ -10,7 +10,7 @@ toc_max_heading_level: 3
 :::info Reporting security issues
 
 For information on how to properly disclose an Electron vulnerability,
-see [SECURITY.md](https://github.com/electron/electron/blob/main/SECURITY.md).
+see [SECURITY.md](../../SECURITY.md).
 
 For upstream Chromium vulnerabilities: Electron keeps up to date with alternating
 Chromium releases. For more information, see the
@@ -308,7 +308,7 @@ const { session } = require('electron')
 const { URL } = require('node:url')
 
 session
-  .fromPartition('some-partition')
+  .defaultSession
   .setPermissionRequestHandler((webContents, permission, callback) => {
     const parsedUrl = new URL(webContents.getURL())
 
@@ -324,6 +324,8 @@ session
     }
   })
 ```
+
+Note: `session.defaultSession` is only available after `app.whenReady` is called.
 
 ### 6. Do not disable `webSecurity`
 
@@ -416,6 +418,8 @@ session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
   })
 })
 ```
+
+Note: `session.defaultSession` is only available after `app.whenReady` is called.
 
 #### CSP meta tag
 
@@ -793,7 +797,7 @@ ipcMain.handle('get-secrets', (e) => {
 })
 
 function validateSender (frame) {
-  // Value the host of the URL using an actual URL parser and an allowlist
+  // Validate the host of the URL using an actual URL parser and an allowlist
   if ((new URL(frame.url)).host === 'electronjs.org') return true
   return false
 }

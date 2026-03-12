@@ -15,6 +15,7 @@ import apiOptionsClass from './src/transformers/api-options-class';
 import apiStructurePreviews from './src/transformers/api-structure-previews';
 import jsCodeBlocks from './src/transformers/js-code-blocks';
 import fiddleEmbedder from './src/transformers/fiddle-embedder';
+import githubContentsLinks from './src/transformers/github-content-links';
 import apiHistory from './src/transformers/api-history';
 
 let docsSHA = undefined;
@@ -55,7 +56,32 @@ const config: Config = {
     defaultLocale: 'en',
     locales: ['en', 'de', 'es', 'fr', 'ja', 'pt', 'ru', 'zh'],
     path: 'i18n',
-    localeConfigs: {},
+    // Due to a refactor in Docusaurus 3.9, the inferred localeDropdown baseURL paths
+    // get messed up because we build the `en` locale separately from the translated ones.
+    // This part of the config defines those manually.
+    localeConfigs: {
+      de: {
+        baseUrl: '/de/',
+      },
+      es: {
+        baseUrl: '/es/',
+      },
+      fr: {
+        baseUrl: '/fr/',
+      },
+      ja: {
+        baseUrl: '/ja/',
+      },
+      pt: {
+        baseUrl: '/pt/',
+      },
+      ru: {
+        baseUrl: '/ru/',
+      },
+      zh: {
+        baseUrl: '/zh/',
+      },
+    },
   },
   themeConfig: {
     colorMode: {
@@ -219,7 +245,18 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} OpenJS Foundation and Electron contributors.`,
+      copyright: `
+        <p>Copyright <a href="https://openjsf.org">OpenJS Foundation</a> and Electron contributors. All rights reserved. 
+          The <a href="https://openjsf.org">OpenJS Foundation</a> has registered trademarks and uses trademarks.  
+          For a list of trademarks of the <a href="https://openjsf.org">OpenJS Foundation</a>, please see our 
+          <a href="https://trademark-policy.openjsf.org">Trademark Policy</a> and <a href="https://trademark-list.openjsf.org">Trademark List</a>.  
+          Trademarks and logos not indicated on the <a href="https://trademark-list.openjsf.org">list of OpenJS Foundation trademarks</a> 
+          are trademarks&trade; or registered&reg; trademarks of their respective holders. Use of them does not imply any affiliation with 
+          or endorsement by them.</p>
+        <p><a href="https://openjsf.org">The OpenJS Foundation</a> | <a href="https://terms-of-use.openjsf.org">Terms of Use</a> | 
+          <a href="https://privacy-policy.openjsf.org">Privacy Policy</a> | <a href="https://bylaws.openjsf.org">Bylaws</a> | 
+          <a href="https://code-of-conduct.openjsf.org">Code of Conduct</a> | <a href="https://trademark-policy.openjsf.org">Trademark Policy</a>
+          | <a href="https://trademark-list.openjsf.org">Trademark List</a> | <a href="https://www.linuxfoundation.org/cookies">Cookie Policy</a></p>`,
     },
     algolia: {
       appId: 'MG3SRMK3K0',
@@ -262,6 +299,7 @@ const config: Config = {
             apiStructurePreviews,
             jsCodeBlocks,
             fiddleEmbedder,
+            githubContentsLinks,
             apiHistory,
             [npm2yarn, { sync: true, converters: ['yarn'] }],
           ],

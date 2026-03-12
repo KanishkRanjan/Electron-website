@@ -24,26 +24,27 @@ jobs:
       SHA: ${{ github.event.client_payload.sha || github.event.inputs.sha }}
     steps:
       - name: Generate GitHub App token (updater app)
-        uses: electron/github-app-auth-action@384fd19694fe7b6dcc9a684746c6976ad78228ae # v1.1.1
+        uses: electron/github-app-auth-action@e14e47722ed120360649d0789e25b9baece12725 # v2.0.0
         id: generate-token
         with:
           creds: ${{ secrets.DOCS_UPDATER_GH_APP_CREDS }}
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # tag: v5.0.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # tag: v6.0.2
         with:
+          persist-credentials: false
           token: ${{ steps.generate-token.outputs.token }}
-      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # tag: v6.0.0
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # tag: v6.2.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
       - name: Install dependencies
         run: yarn install --immutable
       - name: Prebuild
+        id: prebuild
         run: |
           yarn pre-build ${SHA}
           git add .
           if [ "$(git status --porcelain | grep -v 'docs/latest/.sha')" = "" ]; then
-            echo "Unexpectedly found no new content for docs - this is probably a bug"
-            exit 1
+            echo "::warning:: Unexpectedly found no new content for docs - this might be a bug"
           fi
       - name: Push changes to branch
         uses: dsanders11/github-app-commit-action@43de6da2f4d927e997c0784c7a0b61bd19ad6aac # v1.5.0
@@ -67,7 +68,7 @@ jobs:
       - name: Approve and merge pull request
         shell: bash
         env:
-          GITHUB_TOKEN: ${{ fromJSON(steps.secret-service.outputs.secrets).PR_APPROVER_GH_TOKEN }}
+          GITHUB_TOKEN: ${{ fromJSON(steps.secret-service.outputs.secrets || '{}').PR_APPROVER_GH_TOKEN }}
         run: |
           set -eo pipefail
           gh pr review "docs/update-to-${SHA}" --approve

@@ -1,6 +1,6 @@
 ---
 title: "Menu"
-description: "Create native application menus and context menus."
+description: "Create application menus and context menus."
 slug: menu
 hide_title: false
 ---
@@ -9,9 +9,14 @@ hide_title: false
 
 ## Class: Menu
 
-> Create native application menus and context menus.
+> Create application menus and context menus.
 
 Process: [Main](../glossary.md#main-process)
+
+The presentation of menus varies depending on the operating system:
+
+- Under Windows and Linux, menus are visually similar to Chromium.
+- Under macOS, these will be native menus.
 
 > [!TIP]
 > See also: [A detailed guide about how to implement menus in your application](../tutorial/menus.md).
@@ -30,7 +35,7 @@ The `Menu` class has the following static methods:
 
 #### `Menu.setApplicationMenu(menu)`
 
-- `menu` Menu | null
+- `menu` [Menu](menu.md) | null
 
 Sets `menu` as the application menu on macOS. On Windows and Linux, the
 `menu` will be set as each window's top menu.
@@ -41,7 +46,7 @@ indicate which letter should get a generated accelerator. For example, using
 opens the associated menu. The indicated character in the button label then gets an
 underline, and the `&` character is not displayed on the button label.
 
-In order to escape the `&` character in an item name, add a proceeding `&`. For example, `&&File` would result in `&File` displayed on the button label.
+In order to escape the `&` character in an item name, add a preceding `&`. For example, `&&File` would result in `&File` displayed on the button label.
 
 Passing `null` will suppress the default menu. On Windows and Linux,
 this has the additional effect of removing the menu bar from the window.
@@ -72,9 +77,9 @@ for more information on macOS' native actions.
 
 #### `Menu.buildFromTemplate(template)`
 
-- `template` (MenuItemConstructorOptions | MenuItem)[]
+- `template` (MenuItemConstructorOptions | [MenuItem](menu-item.md))[]
 
-Returns `Menu`
+Returns [`Menu`](menu.md)
 
 Generally, the `template` is an array of `options` for constructing a
 [MenuItem](menu-item.md). The usage can be referenced above.
